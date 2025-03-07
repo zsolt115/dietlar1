@@ -4,10 +4,23 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import { Button } from "@/components/ui/button";
+import { Author, Startup } from '@/sanity/types';
 
+export type StartupTypeCard = Omit<Startup, "author"> & {author?: Author};
 
 const StartupCard = ({ post }: { post: StartupTypeCard }) => {
-  const { _createdAt, views, author: { _id: authorId, name}, title, category, _id, image, description} = post;
+  const { 
+    _createdAt, 
+    views, 
+    author: { 
+      _id: authorId, 
+      name}, 
+    title, 
+    category, 
+    _id, 
+    image, 
+    description
+  } = post;
 
   return (
     <li className="startup-card group">
