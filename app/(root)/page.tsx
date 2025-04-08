@@ -10,7 +10,7 @@ export default async function Home({searchParams}: {
   const query = (await searchParams).query;
   const params = { search: query || null };
 
-  const { data: posts } = await sanityFetch({query: STARTUPS_QUERY, params});
+  const { data: posts } = await sanityFetch({query: STARTUPS_QUERY, params}); // 2:56:33
 
   return (
     <>
@@ -36,7 +36,6 @@ export default async function Home({searchParams}: {
           </p>
         )
       }
-        <li></li>
       </ul>
     </section>
     <SanityLive/>
