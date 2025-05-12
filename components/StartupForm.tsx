@@ -7,10 +7,15 @@ import { Button } from '@/components/ui/button';
 import MDEditor from '@uiw/react-md-editor';
 import { Send } from 'lucide-react';
 import { formSchema } from '@/lib/validation';
+import { z } from "zod";
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const StartupForm = () => {
     const [errors, setErrors] = useState<Record<string, string>>({}); // 3:55:00
     const [pitch, setPitch] = useState("");
+    const { toast } = useToast();
+    const router = useRouter();
 
     const handleFormSubmit = async (prevState: any, formData: FormData) => {
         try {
@@ -23,14 +28,47 @@ const StartupForm = () => {
             }
 
             await formSchema.parseAsync(formValues);
+            console.log(formValues);
 
             // const result = await createIdea(prevState, formData, pitch);
 
             // console.log(result); 4:11:00
+            // if (result.status == 'SUCCESS') {
+            //     toast( {
+            //         title: "Success",
+            //         description: "Your startup pitch has been created successfully",
+            //     });
+
+            //     router.push(`/startup/${result.id}`);
+            // }
+
+            // return result;
         } catch (error) {
+            if (error instanceof z.ZodError) {
+                const fieldErrors = error.flatten().fieldErrors;
 
-        } finally {
+                setErrors(fieldErrors as unknown as Record<string, string>);
 
+                toast({
+                    title: "Error",
+                    description: "Pleast check your inputs and try again",
+                    variant: "destructive"
+                });
+
+                return { ...prevState, error: 'Validation failed', status: "ERROR"}
+            }
+
+            toast({
+                title: "Error",
+                description: "An unexpected error has occured",
+                variant: "destructive"
+            });
+
+            return {
+                ...prevState,
+                error: "An unexpected error has occured",
+                status: "ERROR"
+            }
         }
     }
 
@@ -42,7 +80,7 @@ const StartupForm = () => {
     );
 
   return (
-    <form action={() => {}} className='startup-form'>
+    <form action={formAction} className='startup-form'>
         <div>
             <label htmlFor="title" className='startup-form_label'>Title</label>
             <Input id="title" name="title" className="startup-form_input" required placeholder="Startup Title"/>
@@ -70,7 +108,7 @@ const StartupForm = () => {
         <div data-color-mode="light">
             <label htmlFor="pitch" className='startup-form_label'>Pitch</label>
             
-            <MDEditor value='pitch' onChange={(value) => setPitch(value as string)} id="pitch" preview="edit" height={300} style={{borderRadius: 20, overflow: "hidden"}}
+            <MDEditor value={pitch} onChange={(value) => setPitch(value as string)} id="pitch" preview="edit" height={300} style={{borderRadius: 20, overflow: "hidden"}}
                 textareaProps={{
                     placeholder: "Briefly describe your idea and what problem it solves"
                 }}
