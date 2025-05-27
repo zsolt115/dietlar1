@@ -39,7 +39,7 @@ export const createPitch = async (
                 _ref: session?.id,
             },
             pitch
-        }
+        };
 
         const result = await writeClient.create({_type: "startup", ...startup});
 
