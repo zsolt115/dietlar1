@@ -18,6 +18,7 @@ const StartupForm = () => {
     const { toast } = useToast();
     const router = useRouter();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleFormSubmit = async (prevState: any, formData: FormData) => {
         try {
             const formValues = {
@@ -71,6 +72,7 @@ const StartupForm = () => {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [state, formAction, isPending] = useActionState(handleFormSubmit,
         {
             error: "",
