@@ -23,7 +23,9 @@ const Page = async ({params}: {params: Promise<{id: string}>}) => {
     // loads paralell insead of sequential so the load time will be faster
     const [post, { select: editorPosts }] = await Promise.all([
       client.fetch(STARTUP_BY_ID_QUERY, { id }),
-      client.fetch(PLAYLIST_BY_SLUG_QUERY, { slug: 'editor-picks-new' }),
+      client.fetch(PLAYLIST_BY_SLUG_QUERY, {
+        slug: "editor-picks",
+      }),
     ]);
     
     //const post = await client.fetch(STARTUP_BY_ID_QUERY, { id });
